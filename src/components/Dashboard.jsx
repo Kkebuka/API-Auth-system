@@ -7,7 +7,7 @@ function Dashboard() {
   const [expiredToken, setExpiredToken] = useState(false);
 
   const checkToken = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     const token = localStorage.getItem("access_token");
     setStoredToken(token);
 
@@ -33,9 +33,11 @@ function Dashboard() {
   console.log(storedToken);
   return (
     <div>
-      <button onClick={() => checkToken()}>
-        Click to login to your profile
-      </button>
+      {!expiredToken && (
+        <button onClick={() => checkToken()}>
+          Click to login to your profile
+        </button>
+      )}
       {expiredToken && <Login />}
     </div>
   );
