@@ -1,11 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Dashboard() {
   const [storedToken, setStoredToken] = useState();
 
-  const checkToken = () => {
-    const storedToken = localStorage.getItem("token");
-    setStoredToken("storedToken");
+  const checkToken = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("access_token");
+    setStoredToken(token);
+
+    try {
+      const response = await axios.post(
+        "",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   console.log(storedToken);
