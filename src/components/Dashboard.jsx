@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import Login from "./Login";
 
 function Dashboard() {
   const [storedToken, setStoredToken] = useState();
+  const [expiredToken, setExpiredToken] = useState(false);
 
   const checkToken = async (e) => {
     e.preventDefault();
@@ -22,6 +24,9 @@ function Dashboard() {
       console.log(response);
     } catch (error) {
       console.log("error", error);
+      if (error.response.status === 401) {
+        setExpiredToken(true);
+      }
     }
   };
 
@@ -31,6 +36,7 @@ function Dashboard() {
       <button onClick={() => checkToken()}>
         Click to login to your profile
       </button>
+      {expiredToken && <Login />}
     </div>
   );
 }
