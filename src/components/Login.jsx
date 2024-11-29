@@ -3,19 +3,37 @@ import React, { useState } from "react";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("", {
+        username,
+        password,
+      });
+
+      const { access_token } = response.data;
+      localStorage.setItem("access_token", access_token);
+
+      console.log("Login succesfully: ", response.data);
+    } catch {
+      setErrorMessage("Login failed, please check your crendentials");
+    }
+  };
 
   return (
     <div>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
+        onSubmit={() => {
+          handleSubmit();
         }}
       >
         <input
           type="text"
           id="username"
           value={username}
-          onClick={(e) => {
+          onChange={(e) => {
             setUsername(e.target.value);
           }}
           required
@@ -24,11 +42,13 @@ function Login() {
           type="password"
           id="password"
           value={password}
-          onClick={(e) => {
+          onChange={(e) => {
             setPassword(e.target.value);
           }}
           required
         />
+        {setErrorMessage && <h5> {errorMessage}</h5>}
+        <button type="submit">Login</button>
       </form>
     </div>
   );
