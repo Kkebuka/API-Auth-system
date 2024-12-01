@@ -4,19 +4,21 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  //   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      const response = await axios.post("", {
+      const response = await axios.post("https://dummyjson.com/auth/login", {
         username,
         password,
       });
 
-      const { access_token } = response.data;
-      localStorage.setItem("access_token", access_token);
+      const { accessToken } = response.data;
+      localStorage.setItem("access_token", accessToken);
+      setErrorMessage(null);
 
       console.log("Login succesfully: ", response.data);
+      //   navigate("/url")
     } catch {
       setErrorMessage("Login failed, please check your crendentials");
     }
@@ -25,8 +27,10 @@ function Login() {
   return (
     <div>
       <form
-        onSubmit={() => {
+        onSubmit={(e) => {
+          e.preventDefault();
           handleSubmit();
+          console.log("done");
         }}
       >
         <input
@@ -47,7 +51,7 @@ function Login() {
           }}
           required
         />
-        {setErrorMessage && <h5> {errorMessage}</h5>}
+        {errorMessage && <h5> {errorMessage}</h5>}
         <button type="submit">Login</button>
       </form>
     </div>

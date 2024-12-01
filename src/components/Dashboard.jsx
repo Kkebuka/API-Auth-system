@@ -12,15 +12,11 @@ function Dashboard() {
     setStoredToken(token);
 
     try {
-      const response = await axios.post(
-        "",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
-        }
-      );
+      const response = await axios.get("https://dummyjson.com/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(response);
     } catch (error) {
       console.log("error", error);
