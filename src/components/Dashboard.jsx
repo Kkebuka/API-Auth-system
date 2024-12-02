@@ -12,6 +12,7 @@ function Dashboard() {
     // e.preventDefault();
     const token = localStorage.getItem("access_token");
     setStoredToken(token);
+    console.log(token);
 
     try {
       const response = await axios.get("https://dummyjson.com/auth/me", {
@@ -54,7 +55,7 @@ function Dashboard() {
           <button onClick={handleLogout}>Logout</button>
         </div>
       )}
-      {expiredToken && <Login />}
+      {expiredToken && <Login loading={loading} setLoading={setLoading} />}
     </div>
   );
 }

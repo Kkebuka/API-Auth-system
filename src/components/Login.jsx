@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-function Login() {
+function Login({ loading, setLoading }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -16,11 +16,14 @@ function Login() {
       const { accessToken } = response.data;
       localStorage.setItem("access_token", accessToken);
       setErrorMessage(null);
+      console.log(accessToken);
 
       console.log("Login succesfully: ", response.data);
       //   navigate("/url")
     } catch {
       setErrorMessage("Login failed, please check your crendentials");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -28,6 +31,7 @@ function Login() {
     <div>
       <form
         onSubmit={(e) => {
+          setLoading(true);
           e.preventDefault();
           handleSubmit();
           console.log("done");
