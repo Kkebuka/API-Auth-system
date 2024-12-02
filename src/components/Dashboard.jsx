@@ -8,33 +8,31 @@ function Dashboard() {
   const [profile, setProfile] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const checkToken = async (e) => {
-    // e.preventDefault();
-    const token = localStorage.getItem("access_token");
-    setStoredToken(token);
-    console.log(token);
-
-    try {
-      const response = await axios.get("https://dummyjson.com/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setProfile(response.data);
-      console.log(response);
-    } catch (error) {
-      console.log("error", error);
-      if (error.response.status === 401) {
-        setExpiredToken(true);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const checkToken = async (e) => {
+      // e.preventDefault();
+      const token = localStorage.getItem("access_token");
+      setStoredToken(token);
+
+      try {
+        const response = await axios.get("https://dummyjson.com/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProfile(response.data);
+        console.log(response);
+      } catch (error) {
+        console.log("error", error);
+        if (error.response.status === 401) {
+          setExpiredToken(true);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
     checkToken();
-  }, []);
+  }, [storedToken]);
 
   //   checkToken();
   if (loading) {
@@ -43,6 +41,7 @@ function Dashboard() {
 
   const handleLogout = () => {
     setStoredToken(null);
+    localStorage.setItem("access_token", null);
   };
   console.log(storedToken);
   return (
@@ -52,7 +51,7 @@ function Dashboard() {
           <img src="" alt="" />
           <h4>Welcome </h4>
           {console.log(profile)}
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={() => handleLogout()}>Logout</button>
         </div>
       )}
       {expiredToken && <Login loading={loading} setLoading={setLoading} />}
